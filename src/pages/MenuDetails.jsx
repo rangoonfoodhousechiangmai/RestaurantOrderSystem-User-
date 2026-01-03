@@ -8,6 +8,7 @@ export default function MenuDetails() {
     const navigate = useNavigate();
 
     const [item, setItem] = useState(null);
+    if (item) console.log(item);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [quantity, setQuantity] = useState(1);
@@ -38,8 +39,10 @@ export default function MenuDetails() {
 
     const addToCart = () => {
         const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+        console.log(cart);
         const existing = cart.find(c => c.id === item.id);
 
+        // Update quantity if item already in cart
         if (existing) {
             existing.quantity += quantity;
         } else {
@@ -47,6 +50,8 @@ export default function MenuDetails() {
         }
 
         localStorage.setItem('cart', JSON.stringify(cart));
+        // Dispatch storage event to update navbar
+        window.dispatchEvent(new Event('storage'));
         alert('Added to cart!');
     };
 
@@ -71,14 +76,14 @@ export default function MenuDetails() {
                     {/* Details */}
                     <div className="col-lg-7 mb-4">
                         <div className=" p-2 h-100 rounded">
-                            <h3>{item.mm_name}</h3>
+                            <h3>{item.eng_name}</h3>
                             <p className="text-muted">{item.eng_name}</p>
 
                             <h3 className="text-danger mb-3">
-                                {item.price} Ks
+                                {item.price} THB
                             </h3>
 
-                            <p>{item.mm_description}</p>
+                            {/* <p>{item.eng_description}</p> */}
                             <p className="text-muted">{item.eng_description}</p>
 
                             {/* Quantity */}

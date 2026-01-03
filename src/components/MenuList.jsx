@@ -33,7 +33,7 @@ export default function MenuList({ selectedCategory }) {
 
                 {filteredMenuItems && filteredMenuItems.map(item => (
                     <div key={item.id} className="col-6 col-md-4 col-lg-3">
-                        <Link to={`/menu/${item.id}`} className="text-decoration-none">
+                        <Link to={`/menus/${item.id}`} className="text-decoration-none">
                             <div className="card h-100 p-md-3">
                             <img
                                 src={`${STORAGE_URL}/${item.image_path}`}
@@ -43,8 +43,8 @@ export default function MenuList({ selectedCategory }) {
                                 style={{ height: "150px", objectFit: "cover" }}
                             />
                             <div className="card-body d-flex flex-column" >
-                                <h5 className="card-title text-center">{item.mm_name}</h5>
-                                <p className="card-text text-center" style={{color: '#E94B4B'}}>{item.price} Ks</p>
+                                <h5 className="card-title text-center">{item.eng_name}</h5>
+                                <p className="card-text text-center" style={{color: '#E94B4B'}}>{item.price} THB</p>
                                 {/* <p>{item.eng_description}</p> */}
                                 {/* <button
                                     className="btn btn-danger mt-auto"

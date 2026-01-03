@@ -9,10 +9,11 @@ export default function CategoryList({ onCategorySelect }) {
         <div>
             <h1 className='text-danger mt-3'>Categories</h1>
             <div className='overflow-auto d-flex gap-3 py-2'>
-                {loading && <p>Loading...</p>}
+                {/* {loading && <p>Loading...</p>} */}
                 {error && <p className='text-danger'>Error: {error}</p>}
+                <button className='category-item btn btn-danger text-white text-nowrap' onClick={() => onCategorySelect(null)}>All</button>
                 {categories && categories.data.map((category) => (
-                    <button className='category-item btn btn-danger text-white text-nowrap' key={category.id} onClick={() => onCategorySelect(category.id)}>{category.mm_name}</button>
+                    <button className='category-item btn btn-danger text-white text-nowrap' key={category.id} onClick={() => onCategorySelect(category.id)}>{category.eng_name}</button>
                 ))}
             </div>
         </div>
