@@ -2,13 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { STORAGE_URL } from '../services/config';
 import { api } from '../services/api';
+import { useCart } from '../contexts/CartContext';
 
 export default function MenuDetails() {
     const { id } = useParams();
     const navigate = useNavigate();
+    const { addToCart } = useCart();
 
     const [item, setItem] = useState(null);
-    if (item) console.log(item);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [quantity, setQuantity] = useState(1);
@@ -18,7 +19,6 @@ export default function MenuDetails() {
         api.get(`/menus/${id}`)
             .then(res => setItem(res.data))
             .catch(err => {
-                console.log(err.message)
                 if (err.message === "404") {
                     navigate('/404');
                 } else {
@@ -37,21 +37,8 @@ export default function MenuDetails() {
         if (quantity > 1) setQuantity(quantity - 1);
     };
 
-    const addToCart = () => {
-        const cart = JSON.parse(localStorage.getItem('cart') || '[]');
-        console.log(cart);
-        const existing = cart.find(c => c.id === item.id);
-
-        // Update quantity if item already in cart
-        if (existing) {
-            existing.quantity += quantity;
-        } else {
-            cart.push({ ...item, quantity });
-        }
-
-        localStorage.setItem('cart', JSON.stringify(cart));
-        // Dispatch storage event to update navbar
-        window.dispatchEvent(new Event('storage'));
+    const handleAddToCart = () => {
+        addToCart(item, quantity);
         alert('Added to cart!');
     };
 
@@ -116,7 +103,7 @@ export default function MenuDetails() {
                                 {/* Add to Cart Button */}
                                 <button
                                     className="btn btn-danger px-4"
-                                    onClick={addToCart}
+                                    onClick={handleAddToCart}
                                 >
                                     <i className="fa fa-shopping-cart me-2"></i>
                                     <span className="d-none d-sm-inline">

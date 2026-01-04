@@ -1,24 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
+import { useCart } from "../contexts/CartContext";
 
 export default function Navbar() {
-  const [cart, setCart] = useState([]);
-
-  useEffect(() => {
-    const updateCart = () => {
-      const cartData = JSON.parse(localStorage.getItem('cart') || '[]');
-      setCart(cartData);
-    };
-
-    updateCart();
-    window.addEventListener('storage', updateCart);
-
-    return () => {
-      window.removeEventListener('storage', updateCart);
-    };
-  }, []);
-
-  const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+  const { totalItems } = useCart();
 
   return (
     <nav className="navbar navbar-expand-lg shadow-sm mb-4" style={{backgroundColor: '#E94B4B'}}>
