@@ -30,7 +30,7 @@ async function apiRequest(endpoint, options = {}) {
     localStorage.removeItem('tableSessionToken');
     localStorage.removeItem('tableNumber');
     // Optional: redirect to scan page
-    window.location.href = '/scan?session_expired=true';
+    // window.location.href = '/scan?session_expired=true';
     throw new Error('Session expired');
   }
   

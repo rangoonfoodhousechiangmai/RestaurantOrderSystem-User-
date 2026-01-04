@@ -2,10 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { STORAGE_URL } from '../services/config';
 import { api } from '../services/api';
+import { useCart } from '../contexts/CartContext';
 
 export default function MenuDetails() {
     const { id } = useParams();
     const navigate = useNavigate();
+    const { addToCart } = useCart();
 
     const [item, setItem] = useState(null);
     const [loading, setLoading] = useState(true);
@@ -17,7 +19,6 @@ export default function MenuDetails() {
         api.get(`/menus/${id}`)
             .then(res => setItem(res.data))
             .catch(err => {
-                console.log(err.message)
                 if (err.message === "404") {
                     navigate('/404');
                 } else {
@@ -36,17 +37,8 @@ export default function MenuDetails() {
         if (quantity > 1) setQuantity(quantity - 1);
     };
 
-    const addToCart = () => {
-        const cart = JSON.parse(localStorage.getItem('cart') || '[]');
-        const existing = cart.find(c => c.id === item.id);
-
-        if (existing) {
-            existing.quantity += quantity;
-        } else {
-            cart.push({ ...item, quantity });
-        }
-
-        localStorage.setItem('cart', JSON.stringify(cart));
+    const handleAddToCart = () => {
+        addToCart(item, quantity);
         alert('Added to cart!');
     };
 
@@ -71,14 +63,14 @@ export default function MenuDetails() {
                     {/* Details */}
                     <div className="col-lg-7 mb-4">
                         <div className=" p-2 h-100 rounded">
-                            <h3>{item.mm_name}</h3>
+                            <h3>{item.eng_name}</h3>
                             <p className="text-muted">{item.eng_name}</p>
 
                             <h3 className="text-danger mb-3">
-                                {item.price} Ks
+                                {item.price} THB
                             </h3>
 
-                            <p>{item.mm_description}</p>
+                            {/* <p>{item.eng_description}</p> */}
                             <p className="text-muted">{item.eng_description}</p>
 
                             {/* Quantity */}
@@ -111,7 +103,7 @@ export default function MenuDetails() {
                                 {/* Add to Cart Button */}
                                 <button
                                     className="btn btn-danger px-4"
-                                    onClick={addToCart}
+                                    onClick={handleAddToCart}
                                 >
                                     <i className="fa fa-shopping-cart me-2"></i>
                                     <span className="d-none d-sm-inline">

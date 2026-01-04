@@ -1,7 +1,10 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { useCart } from "../contexts/CartContext";
 
 export default function Navbar() {
+  const { totalItems } = useCart();
+
   return (
     <nav className="navbar navbar-expand-lg shadow-sm mb-4" style={{backgroundColor: '#E94B4B'}}>
       <div className="container">
@@ -13,15 +16,17 @@ export default function Navbar() {
         {/* Right side */}
         <div className="ms-auto">
           <Link
-            to="/cart"
+            to="/carts"
             className="btn btn-outline-light position-relative"
           >
             🛒 Cart
 
-            {/* Badge (static UI) */}
-            <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-light text-danger">
-              0
-            </span>
+            {/* Badge (dynamic) */}
+            {totalItems > 0 && (
+              <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-light text-danger">
+                {totalItems}
+              </span>
+            )}
           </Link>
         </div>
       </div>
