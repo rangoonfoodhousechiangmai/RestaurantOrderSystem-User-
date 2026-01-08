@@ -13,6 +13,11 @@ export default function MenuDetails() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [quantity, setQuantity] = useState(1);
+    const [selectedProtein, setSelectedProtein] = useState(null);
+    const [selectedAddon, setSelectedAddon] = useState([]);
+    const [selectedFlavor, setSelectedFlavor] = useState(null);
+    const [specialRequest, setSpecialRequest] = useState('');
+
 
     useEffect(() => {
         setLoading(true);
@@ -25,8 +30,13 @@ export default function MenuDetails() {
                     setError(err.message);
                 }
             })
-            .finally(() => setLoading(false));
+    .finally(() => setLoading(false));
     }, [id]);
+
+    const proteinModifier = item && item.modifiers && item.modifiers.filter(mod => mod.type === 'protein' && mod.selection_type === 'single');
+    const addOnModifier = item && item.modifiers && item.modifiers.filter(mod => mod.type === 'addon' && mod.selection_type === 'multiple');
+    const flavorModifier = item && item.modifiers && item.modifiers.filter(mod => mod.type === 'flavor' && mod.selection_type === 'single');
+    
 
 
     const increaseQty = () => {
@@ -38,7 +48,20 @@ export default function MenuDetails() {
     };
 
     const handleAddToCart = () => {
-        addToCart(item, quantity);
+        if (proteinModifier.length !== 0 && selectedProtein === null) {
+            console.log(proteinModifier);
+            alert('Please select a protein.');
+            return;
+        }
+        const itemToAdd = {
+            ...item,
+            price: item.price + (selectedProtein ? selectedProtein.price : 0) + selectedAddon.reduce((sum, a) => sum + a.price, 0) + (selectedFlavor ? selectedFlavor.price : 0),
+            selectedProtein,
+            selectedAddon,
+            selectedFlavor,
+            specialRequest,
+        };
+        addToCart(itemToAdd, quantity);
         alert('Added to cart!');
     };
 
@@ -64,8 +87,6 @@ export default function MenuDetails() {
                     <div className="col-lg-7 mb-4">
                         <div className=" p-2 h-100 rounded">
                             <h3>{item.eng_name}</h3>
-                            <p className="text-muted">{item.eng_name}</p>
-
                             <h3 className="text-danger mb-3">
                                 {item.price} THB
                             </h3>
@@ -73,6 +94,86 @@ export default function MenuDetails() {
                             {/* <p>{item.eng_description}</p> */}
                             <p className="text-muted">{item.eng_description}</p>
 
+                            {/* protein */}
+                            {proteinModifier && proteinModifier.length > 0 && (
+                                <div className="mb-3">
+                                    <h5>Choose Protein:</h5>
+                                    {proteinModifier.map((option, index) => (
+                                        <div key={index} className="form-check">
+                                            <input required
+                                                className="form-check-input"
+                                                type="radio"
+                                                name="protein"
+                                                id={`protein-${index}`}
+                                                value={option.name}
+                                                // checked={selectedProtein && selectedProtein.name === option.name}
+                                                onChange={() => setSelectedProtein(option)}
+                                            />
+                                            <label className="form-check-label" htmlFor={`protein-${index}`}>
+                                                {option.name} (+{option.price} THB)
+                                            </label>
+                                        </div>
+                                    ))}
+                                </div>
+                            )}
+
+                            {/* Add on */}
+                            {addOnModifier && addOnModifier.length > 0 && (
+                                <div className="mb-3">
+                                    <h5>Add on</h5>
+                                    {addOnModifier.map((option, index) => (
+                                        <div key={index} className="form-check">
+                                            <input
+                                                className="form-check-input"
+                                                type="checkbox"
+                                                name="addon"
+                                                id={`addon-${index}`}
+                                                value={option.name}
+                                                // checked={selectedAddon.some(a => a.name === option.name)}
+                                                onChange={(e) => {
+                                                    if (e.target.checked) {
+                                                        setSelectedAddon([...selectedAddon, option]);
+                                                    } else {
+                                                        setSelectedAddon(selectedAddon.filter(a => a.name !== option.name));
+                                                    }
+                                                }}
+                                            />
+                                            <label className="form-check-label" htmlFor={`addon-${index}`}>
+                                                {option.name} (+{option.price} THB)
+                                            </label>
+                                        </div>
+                                    ))}
+                                </div>
+                            )}
+
+                            {/* Flavor */}
+                            {flavorModifier && flavorModifier.length > 0 && (
+                                <div className="mb-3">
+                                    <h5>Choose Flavor:</h5>
+                                    {flavorModifier.map((option, index) => (
+                                        <div key={index} className="form-check">
+                                            <input
+                                                className="form-check-input"
+                                                type="radio"
+                                                name="flavor"
+                                                id={`flavor-${index}`}
+                                                value={option.name}
+                                                onChange={() => setSelectedFlavor(option)}
+                                            />
+                                            <label className="form-check-label" htmlFor={`flavor-${index}`}>
+                                                {option.name} {option.price ? `(+${option.price} THB)` : ''}
+                                            </label>
+                                        </div>
+                                    ))}
+                                </div>
+                            )}
+
+                            {/* Special Request */}
+
+                           <div className='mb-3'>
+                                <textarea onChange={(e) => setSpecialRequest(e.target.value)} name="specialRequest" rows={5} id="" className='form-control' placeholder='Do you have any request?'></textarea>
+                           </div>
+                           
                             {/* Quantity */}
                             <div className="d-flex  flex-sm-row align-items-stretch align-items-sm-center mb-4 gap-3">
 
