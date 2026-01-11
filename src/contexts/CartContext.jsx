@@ -25,32 +25,36 @@ export const CartProvider = ({ children }) => {
   }, [cart]);
 
   const addToCart = (item, quantity = 1) => {
+    const addonPart = item.selectedAddon && item.selectedAddon.length > 0 ? item.selectedAddon.map(a => a.name).sort().join(',') : 'none';
+    const uniqueId = `${item.id}-${item.selectedProtein?.name || 'none'}-${addonPart}-${item.selectedFlavor?.name || 'none'}`;
+    // console.log(uniqueId);
     setCart(prevCart => {
-      const existing = prevCart.find(c => c.id === item.id);
+      const existing = prevCart.find(c => c.uniqueId === uniqueId);
       if (existing) {
         return prevCart.map(c =>
-          c.id === item.id ? { ...c, quantity: c.quantity + quantity } : c
+          c.uniqueId === uniqueId ? { ...c, quantity: c.quantity + quantity } : c
         );
       } else {
-        return [...prevCart, { ...item, quantity }];
+        return [...prevCart, { ...item, quantity, uniqueId }];
       }
     });
   };
 
-  const updateQuantity = (id, quantity) => {
-    if (quantity <= 0) {
-      removeFromCart(id);
+  const updateQuantity = (uniqueId, quantity) => {
+    if (quantity < 1) {
+      // removeFromCart(uniqueId);
       return;
     }
     setCart(prevCart =>
       prevCart.map(item =>
-        item.id === id ? { ...item, quantity } : item
+        item.uniqueId === uniqueId ? { ...item, quantity } : item
       )
     );
   };
 
-  const removeFromCart = (id) => {
-    setCart(prevCart => prevCart.filter(item => item.id !== id));
+  const removeFromCart = (uniqueId) => {
+    // console.log('removing...')
+    setCart(prevCart => prevCart.filter(item => item.uniqueId !== uniqueId));
   };
 
   const clearCart = () => {

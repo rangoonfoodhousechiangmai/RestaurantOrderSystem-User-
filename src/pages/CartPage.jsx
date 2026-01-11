@@ -6,22 +6,22 @@ import { useCart } from '../contexts/CartContext';
 export default function CartPage() {
   const { cart, updateQuantity, removeFromCart, clearCart, totalItems, totalPrice } = useCart();
 
-  const increaseQty = (id) => {
-    const item = cart.find(item => item.id === id);
+  const increaseQty = (uniqueId) => {
+    const item = cart.find(item => item.uniqueId === uniqueId);
     if (item) {
-      updateQuantity(id, item.quantity + 1);
+      updateQuantity(uniqueId, item.quantity + 1);
     }
   };
 
-  const decreaseQty = (id) => {
-    const item = cart.find(item => item.id === id);
+  const decreaseQty = (uniqueId) => {
+    const item = cart.find(item => item.uniqueId === uniqueId);
     if (item) {
-      updateQuantity(id, item.quantity - 1);
+      updateQuantity(uniqueId, item.quantity - 1);
     }
   };
 
-  const removeItem = (id) => {
-    removeFromCart(id);
+  const removeItem = (uniqueId) => {
+    removeFromCart(uniqueId);
   };
 
     if (cart.length === 0) {
@@ -43,7 +43,7 @@ export default function CartPage() {
         <div className="row flex-column-reverse flex-md-row">
           <div className="col-lg-8 mt-2 mt-sm-0">
             {cart.map(item => (
-              <div key={item.id} className="card mb-3">
+              <div key={item.uniqueId} className="card mb-3">
                 <div className="card-body">
                   <div className="row align-items-center">
                     <div className="col-md-2 col-6">
@@ -55,23 +55,38 @@ export default function CartPage() {
                     </div>
                     <div className="col-md-4 col-6">
                       <h5 className="card-title">{item.eng_name}</h5>
+                      {/* protein */}
+                      {item.selectedProtein && (
+                        <p className="card-text text-muted">Protein: {item.selectedProtein.name}</p>
+                      )}
+                      {/* addon */}
+                      {item.selectedAddon && item.selectedAddon.length > 0 && (
+                        <p className="card-text text-muted">Add-ons: {item.selectedAddon.map(a => a.name).join(', ')}</p>
+                      )}
+
+                      {/* flavor */}
+                      {item.selectedFlavor && (
+                        <p className="card-text text-muted">Flavor: {item.selectedFlavor.name}</p>
+                      )}
+
+
                       <p className="card-text text-muted">{item.price} THB each</p>
                     </div>
                     <div className="col-md-3 col-4 mt-3 mt-md-0">
                       <div className="d-flex align-items-center">
                         <button
                           className="btn btn-outline-secondary btn-sm"
-                          onClick={() => decreaseQty(item.id)}
+                          onClick={() => decreaseQty(item.uniqueId)}
                         >
                           -
                         </button>
                         <span className="mx-3 fw-bold">{item.quantity}</span>
                         <button
                           className="btn btn-outline-secondary btn-sm"
-                          onClick={() => increaseQty(item.id)}
+                          onClick={() => increaseQty(item.uniqueId)}
                         >
                           +
-                        </button> 
+                        </button>
                       </div>
                     </div>
                     <div className="col-md-2 col-4 mt-3 mt-md-0">
@@ -80,7 +95,7 @@ export default function CartPage() {
                     <div className="col-md-1 col-4 mt-3 mt-md-0 text-end">
                       <button
                         className="btn btn-outline-danger btn-sm"
-                        onClick={() => removeItem(item.id)}
+                        onClick={() => removeItem(item.uniqueId)}
                       >
                         ×
                       </button>
