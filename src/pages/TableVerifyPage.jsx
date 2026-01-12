@@ -19,7 +19,7 @@ export default function TableVerifyPage() {
       // Save session
       localStorage.setItem('tableSessionToken', result.data.session_token);
       setTableNumber(result.data.table.table_number);
-      localStorage.setItem('tableNumber', result.data.table.table_number);
+      localStorage.setItem('tableId', result.data.table.id);
       
       // Show success
       setStatus('success');
