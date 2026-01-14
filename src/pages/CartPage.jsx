@@ -2,12 +2,50 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { STORAGE_URL } from '../services/config';
 import { useCart } from '../contexts/CartContext';
+import { api } from '../services/api';
 
 export default function CartPage() {
   const { cart, updateQuantity, removeFromCart, clearCart, totalItems, totalPrice } = useCart();
   const [showModal, setShowModal] = useState(false);
   const tableSessionToken = localStorage.getItem('tableSessionToken');
-  const tableId = localStorage.getItem('tableId');
+  const [orderType, setOrderType] = useState(null);
+
+  const prepareOrderPayload = (cartItems, tableToken, orderType) => {
+    return {
+      table_token: tableToken,
+      order_type: orderType,
+      items: cartItems.map(item => ({
+        menu_id: item.id,
+        quantity: item.quantity,
+        protein_id: item.selectedProtein?.id || null,
+        flavor_id: item.selectedFlavor?.id || null,
+        addon_ids: item.selectedAddon?.map(a => a.id) || [],
+        special_request: item.specialRequest || ''
+      }))
+    };
+  };
+
+  const submitOrder = async (selectedOrderType) => {
+      // if (!tableSessionToken) {
+      //   alert('Please scan the QR code to verify your table first.');
+      //   return;
+      // }
+
+    try {
+      const payload = prepareOrderPayload(cart, tableSessionToken, selectedOrderType);
+      await api.post('/orders', payload);
+      clearCart();
+      alert('Order submitted successfully!');
+      // Optionally redirect to order status page or home
+    } catch (error) {
+      console.error('Order submission failed:', error);
+      alert('Failed to submit order. Please try again.');
+    }
+  };
+
+
+
+
   // console.log(tableSessionToken);
 
   const increaseQty = (uniqueId) => {
@@ -171,7 +209,7 @@ export default function CartPage() {
                     <button
                       className="btn w-100 border rounded-4 py-4 d-flex flex-column align-items-center gap-2 order-type-btn"
                       onClick={() => {
-                        setOrderType('dine_in');
+                        submitOrder('dine_in');
                         setShowModal(false);
                       }}
                     >
@@ -186,7 +224,7 @@ export default function CartPage() {
                     <button
                       className="btn w-100 border rounded-4 py-4 d-flex flex-column align-items-center gap-2 order-type-btn"
                       onClick={() => {
-                        setOrderType('take_away');
+                        submitOrder('take_away');
                         setShowModal(false);
                       }}
                     >
