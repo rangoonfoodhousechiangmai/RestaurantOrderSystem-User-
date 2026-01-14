@@ -49,10 +49,15 @@ export default function MenuDetails() {
 
     const handleAddToCart = () => {
         if (proteinModifier.length !== 0 && selectedProtein === null) {
-            console.log(proteinModifier);
             alert('Please select a protein.');
             return;
         }
+
+        // const selectedModifierIds = [
+        //     ...(selectedProtein ? [selectedProtein.id] : []),
+        //     ...(selectedFlavor ? [selectedFlavor.id] : []),
+        //     ...selectedAddon.map(addon => addon.id),
+        // ];
         const itemToAdd = {
             ...item,
             price: item.price + (selectedProtein ? selectedProtein.price : 0) + selectedAddon.reduce((sum, a) => sum + a.price, 0) + (selectedFlavor ? selectedFlavor.price : 0),
