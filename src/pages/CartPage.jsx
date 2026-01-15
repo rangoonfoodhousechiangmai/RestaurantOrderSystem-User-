@@ -12,7 +12,7 @@ export default function CartPage() {
 
   const prepareOrderPayload = (cartItems, tableToken, orderType) => {
     return {
-      table_token: tableToken,
+      table_session_token: tableToken,
       order_type: orderType,
       items: cartItems.map(item => ({
         menu_id: item.id,
@@ -27,18 +27,22 @@ export default function CartPage() {
 
   const submitOrder = async (selectedOrderType) => {
       // if (!tableSessionToken) {
-      //   alert('Please scan the QR code to verify your table first.');
+      //   alert('Please scan the QR code');
       //   return;
       // }
 
-    try {
+  try {
       const payload = prepareOrderPayload(cart, tableSessionToken, selectedOrderType);
-      await api.post('/orders', payload);
-      clearCart();
-      alert('Order submitted successfully!');
+      const response = await api.post('/orders', payload);
+      if (response.qrErr) {
+        alert(response.qrErr);
+      } else {
+        alert('Order submitted successfully');
+        clearCart();
+      }
       // Optionally redirect to order status page or home
     } catch (error) {
-      console.error('Order submission failed:', error);
+      // console.error(error);
       alert('Failed to submit order. Please try again.');
     }
   };

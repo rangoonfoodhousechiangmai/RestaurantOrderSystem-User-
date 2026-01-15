@@ -53,6 +53,11 @@ export default function MenuDetails() {
             return;
         }
 
+        if (flavorModifier.length !== 0 && selectedFlavor === null) {
+            alert('Please select a flavor.');
+            return;
+        }
+
         // const selectedModifierIds = [
         //     ...(selectedProtein ? [selectedProtein.id] : []),
         //     ...(selectedFlavor ? [selectedFlavor.id] : []),

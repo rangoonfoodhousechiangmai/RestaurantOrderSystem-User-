@@ -28,7 +28,7 @@ async function apiRequest(endpoint, options = {}) {
   // Handle session expiration
   if (response.status === 401) {
     localStorage.removeItem('tableSessionToken');
-    localStorage.removeItem('tableNumber');
+    // localStorage.removeItem('tableNumber');
     // Optional: redirect to scan page
     // window.location.href = '/scan?session_expired=true';
     throw new Error('Session expired');
