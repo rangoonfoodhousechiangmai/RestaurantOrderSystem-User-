@@ -26,24 +26,21 @@ export default function CartPage() {
   };
 
   const submitOrder = async (selectedOrderType) => {
-      // if (!tableSessionToken) {
-      //   alert('Please scan the QR code');
-      //   return;
-      // }
+      if (!tableSessionToken) {
+        alert('Please scan the QR code');
+        return;
+      }
 
   try {
       const payload = prepareOrderPayload(cart, tableSessionToken, selectedOrderType);
       const response = await api.post('/orders', payload);
-      if (response.qrErr) {
-        alert(response.qrErr);
-      } else {
         alert('Order submitted successfully');
         clearCart();
-      }
+
       // Optionally redirect to order status page or home
     } catch (error) {
       // console.error(error);
-      alert('Failed to submit order. Please try again.');
+      alert(error.message || 'Failed to submit order. Please try again.');
     }
   };
 
