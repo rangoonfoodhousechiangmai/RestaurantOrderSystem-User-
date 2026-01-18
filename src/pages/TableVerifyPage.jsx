@@ -19,7 +19,7 @@ export default function TableVerifyPage() {
       // Save session
       localStorage.setItem('tableSessionToken', result.data.session_token);
       setTableNumber(result.data.table.table_number);
-      localStorage.setItem('tableId', result.data.table.id);
+      // localStorage.setItem('tableId', result.data.table.id);
       
       // Show success
       setStatus('success');
@@ -28,7 +28,7 @@ export default function TableVerifyPage() {
       setTimeout(() => navigate('/'), 2000);
       
     } catch (error) {
-      console.error('Invalid QR code:', error);
+      // console.error('Invalid QR code:', error);
       setStatus('error');
       setTimeout(() => navigate('/'), 2000);
     }

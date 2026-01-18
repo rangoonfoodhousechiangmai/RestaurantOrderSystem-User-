@@ -28,7 +28,7 @@ async function apiRequest(endpoint, options = {}) {
   // Handle session expiration
   if (response.status === 401) {
     localStorage.removeItem('tableSessionToken');
-    localStorage.removeItem('tableNumber');
+    // localStorage.removeItem('tableNumber');
     // Optional: redirect to scan page
     // window.location.href = '/scan?session_expired=true';
     throw new Error('Session expired');
@@ -38,8 +38,10 @@ async function apiRequest(endpoint, options = {}) {
     if (response.status === 404) {
       throw new Error("404");
     }
+
     const error = await response.json().catch(() => ({}));
-    throw new Error(error.message || `Request failed: ${response.status}`);
+    console.log(error);
+    throw new Error(error.error || `Request failed: ${response.status}`);
   }
   
   return await response.json();
