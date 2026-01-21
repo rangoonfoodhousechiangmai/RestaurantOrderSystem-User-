@@ -28,6 +28,14 @@ export default function Navbar() {
               </span>
             )}
           </Link>
+
+          <Link
+            to="/history"
+            className="btn btn-outline-light ms-2"
+          >
+            📜 History
+          </Link>
+
         </div>
       </div>
     </nav>

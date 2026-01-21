@@ -7,6 +7,8 @@ import CartPage from "../pages/CartPage";
 import Layout from "../pages/layouts/Layout";
 import TableVerifyPage from "../pages/TableVerifyPage";
 import NotFoundPage from "../pages/NotFoundPage";
+import History from "../pages/OrderHistory";
+
 
 
 const router = createBrowserRouter([
@@ -19,6 +21,7 @@ const router = createBrowserRouter([
       { path: 'table/:slug/:token', element: <TableVerifyPage /> },
       { path: '404', element: <NotFoundPage /> },
       { path: 'carts', element: <CartPage /> },
+      { path: 'history', element: <History/>}
     ],
   },
   {
