@@ -102,16 +102,16 @@ export default function CartPage() {
                     <h5 className="card-title">{item.eng_name}</h5>
                     {/* protein */}
                     {item.selectedProtein && (
-                      <p className="card-text text-muted">Protein: {item.selectedProtein.name}</p>
+                      <p className="card-text text-muted">Protein: {item.selectedProtein.eng_name}</p>
                     )}
                     {/* addon */}
                     {item.selectedAddon && item.selectedAddon.length > 0 && (
-                      <p className="card-text text-muted">Add-ons: {item.selectedAddon.map(a => a.name).join(', ')}</p>
+                      <p className="card-text text-muted">Add-ons: {item.selectedAddon.map(a => a.eng_name).join(', ')}</p>
                     )}
 
                     {/* flavor */}
                     {item.selectedFlavor && (
-                      <p className="card-text text-muted">Flavor: {item.selectedFlavor.name}</p>
+                      <p className="card-text text-muted">Flavor: {item.selectedFlavor.eng_name}</p>
                     )}
 
 

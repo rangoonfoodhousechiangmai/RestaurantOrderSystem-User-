@@ -115,12 +115,12 @@ export default function MenuDetails() {
                                                 type="radio"
                                                 name="protein"
                                                 id={`protein-${index}`}
-                                                value={option.name}
+                                                value={option.eng_name}
                                                 // checked={selectedProtein && selectedProtein.name === option.name}
                                                 onChange={() => setSelectedProtein(option)}
                                             />
                                             <label className="form-check-label" htmlFor={`protein-${index}`}>
-                                                {option.name} (+{option.price} THB)
+                                                {option.eng_name} (+{option.price} THB)
                                             </label>
                                         </div>
                                     ))}
@@ -138,7 +138,7 @@ export default function MenuDetails() {
                                                 type="checkbox"
                                                 name="addon"
                                                 id={`addon-${index}`}
-                                                value={option.name}
+                                                value={option.eng_name}
                                                 // checked={selectedAddon.some(a => a.name === option.name)}
                                                 onChange={(e) => {
                                                     if (e.target.checked) {
@@ -149,7 +149,7 @@ export default function MenuDetails() {
                                                 }}
                                             />
                                             <label className="form-check-label" htmlFor={`addon-${index}`}>
-                                                {option.name} (+{option.price} THB)
+                                                {option.eng_name} (+{option.price} THB)
                                             </label>
                                         </div>
                                     ))}
@@ -167,11 +167,11 @@ export default function MenuDetails() {
                                                 type="radio"
                                                 name="flavor"
                                                 id={`flavor-${index}`}
-                                                value={option.name}
+                                                value={option.eng_name}
                                                 onChange={() => setSelectedFlavor(option)}
                                             />
                                             <label className="form-check-label" htmlFor={`flavor-${index}`}>
-                                                {option.name} {option.price ? `(+${option.price} THB)` : ''}
+                                                {option.eng_name} {option.price ? `(+${option.price} THB)` : ''}
                                             </label>
                                         </div>
                                     ))}

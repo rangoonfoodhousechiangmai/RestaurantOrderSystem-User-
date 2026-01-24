@@ -3,11 +3,12 @@ import { api } from '../services/api';
 import { Link } from 'react-router-dom';
 
 export default function OrderHistory() {
-    let [loading, setLoading] = useState(true);
+    let [loading, setLoading] = useState(false);
     let [error, setError] = useState(null);
     let [orders, setOrders] = useState(null);
     // console.log(orderToken);
     let tableSessionToken = localStorage.getItem('tableSessionToken');
+    // console.log(tableSessionToken);
 
     useEffect(() => {
         const getHistory = async () => {
@@ -17,12 +18,13 @@ export default function OrderHistory() {
                 const response = await api.post('/orders/history', {
                     tableSessionToken
                 });
-
+                console.log(response);
                 if (response?.orders) {
                     setOrders(response.orders);
                 }
             } catch (error) {
-                // console.error(error);
+                setLoading(false);  
+                console.error(error);
             } finally {
                 setLoading(false);
             }
