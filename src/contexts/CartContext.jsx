@@ -25,8 +25,8 @@ export const CartProvider = ({ children }) => {
   }, [cart]);
 
   const addToCart = (item, quantity = 1) => {
-    const addonPart = item.selectedAddon && item.selectedAddon.length > 0 ? item.selectedAddon.map(a => a.name).sort().join(',') : 'none';
-    const uniqueId = `${item.id}-${item.selectedProtein?.name || 'none'}-${addonPart}-${item.selectedFlavor?.name || 'none'}`;
+    const addonPart = item.selectedAddon && item.selectedAddon.length > 0 ? item.selectedAddon.map(a => a.eng_name).sort().join(',') : 'none';
+    const uniqueId = `${item.id}-${item.selectedProtein?.eng_name || 'none'}-${addonPart}-${item.selectedFlavor?.eng_name || 'none'}`;
     // console.log(uniqueId);
     setCart(prevCart => {
       const existing = prevCart.find(c => c.uniqueId === uniqueId);
