@@ -8,6 +8,7 @@ import Layout from "../pages/layouts/Layout";
 import TableVerifyPage from "../pages/TableVerifyPage";
 import NotFoundPage from "../pages/NotFoundPage";
 import History from "../pages/OrderHistory";
+import Payment from "../pages/Payment";
 
 
 
@@ -21,7 +22,8 @@ const router = createBrowserRouter([
       { path: 'table/:slug/:token', element: <TableVerifyPage /> },
       { path: '404', element: <NotFoundPage /> },
       { path: 'carts', element: <CartPage /> },
-      { path: 'history', element: <History/>}
+      { path: 'history', element: <History/>},
+      { path: 'payment', element: <Payment/>}
     ],
   },
   {

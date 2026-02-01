@@ -23,7 +23,7 @@ export default function OrderHistory() {
                     setOrders(response.orders);
                 }
             } catch (error) {
-                setLoading(false);  
+                setLoading(false);
                 console.error(error);
             } finally {
                 setLoading(false);
@@ -42,8 +42,11 @@ export default function OrderHistory() {
     return (<>
         <div className="container">
             {orders && orders.length > 0 ? (
-                <div className="row">
-                    <h1 className="text-center mb-4">Order History</h1>
+                <div className="row mb-3">
+                    <h1 className="text-center mb-2">Order History</h1>
+                    <div className='mb-3'>
+                        <Link to="/" className='btn btn-warning'>Order again</Link>
+                    </div>
                     {orders.map((order, index) => (
                         <div key={order.id} className="col-md-6 mb-2">
                             <div className="card shadow-sm">
@@ -58,7 +61,7 @@ export default function OrderHistory() {
                                 </div>
                                 <div className="card-body">
                                     <p className="card-text mb-2">
-                                        <strong><i className="bi bi-tag me-1"></i>Table No:</strong> {order?.table.slug || 'N/A'}
+                                        <strong><i className="bi bi-tag me-1"></i>Table No:</strong> {order?.table ? order.table.slug : order.table_name}
                                     </p>
                                     <p className="card-text mb-2">
                                         <strong><i className="bi bi-tag me-1"></i>Type:</strong> {order.order_type || 'N/A'}
@@ -66,14 +69,65 @@ export default function OrderHistory() {
                                     <p className="card-text mb-2">
                                         <strong><i className="bi bi-boxes me-1"></i>Quantity:</strong> {order.total_qty || 0}
                                     </p>
-                                    <p className="card-text mb-2">
-                                        <strong><i className="bi bi-cash me-1"></i>Total:</strong> {order.total_price ? `${order.total_price.toFixed(2)} THB` : 'N/A'}
-                                    </p>
                                     <small className="text-muted">
                                         <i className="bi bi-calendar me-1"></i>
-                                        Date: {order.created_at ? new Date(order.created_at).toLocaleDateString() : 'N/A'}
+                                        Date: {order.created_at
+                                            ? new Date(order.created_at).toLocaleString(undefined, {
+                                                year: 'numeric',
+                                                month: '2-digit',
+                                                day: '2-digit',
+                                                hour: '2-digit',
+                                                minute: '2-digit',
+                                            })
+                                            : 'N/A'}
                                     </small>
                                     <br />
+                                    {order.order_items && order.order_items.length > 0 && (
+                                        <div className="mt-3">
+                                            <h6 className="mb-2">Order Items:</h6>
+                                            <table className="table table-striped">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Item</th>
+                                                        <th>Qty</th>
+                                                        <th>Price</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {order.order_items.map((item, idx) => (
+                                                        <tr key={item.id}>
+                                                            <td><strong>{item.menu?.eng_name || item.menu?.mm_name || 'Unknown Item'}</strong><br></br>
+                                                                {item.order_item_modifiers &&
+                                                                    item.order_item_modifiers.length > 0 &&
+                                                                    item.order_item_modifiers.map((mod, index) => (
+                                                                        <span key={index}>
+                                                                            {mod.eng_name}
+                                                                            <br />
+                                                                        </span>
+                                                                    ))}
+                                                            </td>
+                                                            <td>{item.quantity || 0}</td>
+
+                                                            <td>{item.total_price ? `${item.total_price.toFixed(2)} THB` : 'N/A'}</td>
+                                                        </tr>
+
+
+
+                                                    ))}
+                                                    <tr>
+                                                        <td colSpan={2} className='text-center'>Total</td>
+                                                        <td>{order.total_price ? `${order.total_price.toFixed(2)}THB` : 'N/A'}</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                            <div className='text-end'>
+                                                <Link to="/payment" state={{ totalPrice: order.total_price }} className='btn btn-dark'>
+                                                    Payment
+                                                </Link>
+                                                {/* <button >Payment</button> */}
+                                            </div>
+                                        </div>
+                                    )}
                                 </div>
                             </div>
                         </div>
