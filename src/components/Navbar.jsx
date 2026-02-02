@@ -1,16 +1,17 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { useCart } from "../contexts/CartContext";
+import Brand from '../assets/brand.jpg';
 
 export default function Navbar() {
   const { totalItems } = useCart();
 
   return (
-    <nav className="navbar navbar-expand-lg shadow-sm mb-4" style={{backgroundColor: '#E94B4B'}}>
+    <nav className="navbar navbar-expand-lg shadow-sm mb-4 p-0" style={{backgroundColor: '#000'}}>
       <div className="container">
         {/* Brand */}
         <Link className="navbar-brand fw-bold text-white" to="/">
-          🍽 Restaurant
+          <img src={Brand} width={'70px'} alt="" />
         </Link>
 
         {/* Right side */}

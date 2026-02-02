@@ -84,6 +84,9 @@ export default function MenuDetails() {
             {/* ===== Menu Detail Start ===== */}
             <div className="container-fluid pb-5">
                 <div className="row px-xl-5">
+                    <div onClick={() => navigate(-1)} style={{ cursor: 'pointer' }}>
+                        <i class="fa-solid fa-arrow-left fs-1"></i>
+                    </div>
                     {/* Image */}
                     <div className="col-lg-5 mb-4">
                         <img
@@ -190,10 +193,10 @@ export default function MenuDetails() {
                                 {/* Quantity Group */}
                                 <div className="input-group w-100 w-sm-auto" style={{ maxWidth: '130px' }}>
                                     <button
-                                        className="btn btn-danger"
+                                        className="btn btn-dark"
                                         onClick={decreaseQty}
                                     >
-                                        <i className="fa fa-minus"></i>
+                                        <i className="fa fa-minus text-yellow"></i>
                                     </button>
 
                                     <input
@@ -204,20 +207,20 @@ export default function MenuDetails() {
                                     />
 
                                     <button
-                                        className="btn btn-danger"
+                                        className="btn btn-dark"
                                         onClick={increaseQty}
                                     >
-                                        <i className="fa fa-plus"></i>
+                                        <i className="fa fa-plus text-yellow"></i>
                                     </button>
                                 </div>
 
                                 {/* Add to Cart Button */}
                                 <button
-                                    className="btn btn-danger px-4"
+                                    className="btn btn-dark px-4"
                                     onClick={handleAddToCart}
                                 >
-                                    <i className="fa fa-shopping-cart me-2"></i>
-                                    <span className="d-none d-sm-inline">
+                                    <i className="fa fa-shopping-cart me-2 text-yellow"></i>
+                                    <span className="d-none d-sm-inline text-yellow">
                                         Add To Cart
                                     </span>
                                 </button>
@@ -225,11 +228,11 @@ export default function MenuDetails() {
 
 
                             {/* Back */}
-                            <button className="btn btn-outline-danger" onClick={() => {
+                            {/* <button className="btn btn-outline-danger" onClick={() => {
                                 navigate('/');
                             }}>
                                 Back
-                            </button>
+                            </button> */}
                         </div>
                     </div>
                 </div>
