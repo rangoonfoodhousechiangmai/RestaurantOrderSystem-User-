@@ -3,10 +3,12 @@ import { Link } from 'react-router-dom';
 import { STORAGE_URL } from '../services/config';
 import { useCart } from '../contexts/CartContext';
 import { api } from '../services/api';
+import SpinnerOverlay from '../components/SpinnerOverlay';
 
 export default function CartPage() {
   const { cart, updateQuantity, removeFromCart, clearCart, totalItems, totalPrice } = useCart();
   const [showModal, setShowModal] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const tableSessionToken = localStorage.getItem('tableSessionToken');
   const [orderType, setOrderType] = useState(null);
 
@@ -31,17 +33,20 @@ export default function CartPage() {
         return;
       }
 
-  try {
-      const payload = prepareOrderPayload(cart, tableSessionToken, selectedOrderType);
-      const response = await api.post('/orders', payload);
+      setIsSubmitting(true);
+      try {
+        const payload = prepareOrderPayload(cart, tableSessionToken, selectedOrderType);
+        const response = await api.post('/orders', payload);
         alert('Order submitted successfully');
         clearCart();
-
-      // Optionally redirect to order status page or home
-    } catch (error) {
-      // console.error(error);
-      alert(error.message || 'Failed to submit order. Please try again.');
-    }
+        setShowModal(false);
+        // Optionally redirect to order status page or home
+      } catch (error) {
+        // console.error(error);
+        alert(error.message || 'Failed to submit order. Please try again.');
+      } finally {
+        setIsSubmitting(false);
+      }
   };
 
 
@@ -209,10 +214,8 @@ export default function CartPage() {
                   <div className="col-6">
                     <button
                       className="btn w-100 border rounded-4 py-4 d-flex flex-column align-items-center gap-2 order-type-btn"
-                      onClick={() => {
-                        submitOrder('dine_in');
-                        setShowModal(false);
-                      }}
+                      onClick={() => submitOrder('dine_in')}
+                      disabled={isSubmitting}
                     >
                       <i className="fas fa-utensils fs-2 text-primary"></i>
                       <span className="fw-semibold">Dine In</span>
@@ -224,10 +227,8 @@ export default function CartPage() {
                   <div className="col-6">
                     <button
                       className="btn w-100 border rounded-4 py-4 d-flex flex-column align-items-center gap-2 order-type-btn"
-                      onClick={() => {
-                        submitOrder('take_away');
-                        setShowModal(false);
-                      }}
+                      onClick={() => submitOrder('take_away')}
+                      disabled={isSubmitting}
                     >
                       <i className="fas fa-shopping-bag fs-2 text-success"></i>
                       <span className="fw-semibold">Take Away</span>
@@ -241,6 +242,8 @@ export default function CartPage() {
           </div>
         </div>
       )}
+
+      <SpinnerOverlay isVisible={isSubmitting} />
 
     </div>
   );
