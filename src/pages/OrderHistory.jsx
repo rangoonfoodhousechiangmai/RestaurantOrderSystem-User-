@@ -121,7 +121,7 @@ export default function OrderHistory() {
                                                 </tbody>
                                             </table>
                                             <div className='text-end'>
-                                                <Link to="/payment" state={{ totalPrice: order.total_price }} className='btn btn-dark'>
+                                                <Link to="/payment" state={{ totalPrice: order.total_price, orderCode: order.order_code }} className='btn btn-dark'>
                                                     Payment
                                                 </Link>
                                                 {/* <button >Payment</button> */}
