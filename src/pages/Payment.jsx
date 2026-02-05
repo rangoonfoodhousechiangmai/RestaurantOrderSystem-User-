@@ -43,13 +43,14 @@ export default function Payment() {
                 // console.log(response);
                 if (response.status === 400){
                     // console.log(response.error);
-                    throw new Error('Failed to upload payment ');
+                    throw new Error('Failed to upload payment proof.');
                 }
             }
 
             return await response.json();
         } catch (err) {
-            throw err;
+
+            throw new Error(err.error);
         }
     };
 

@@ -78,7 +78,7 @@ export default function CartPage() {
         <div className="text-center">
           <h2>Your Cart is Empty</h2>
           <p className="text-muted">Add some delicious items to your cart!</p>
-          <Link to="/" className="btn btn-danger">Continue Shopping</Link>
+          <Link to="/" className="btn btn-dark">Continue Ordering</Link>
         </div>
 
 

@@ -3,12 +3,12 @@ import { useParams, Link, useNavigate } from 'react-router-dom';
 import { STORAGE_URL } from '../services/config';
 import { api } from '../services/api';
 import { useCart } from '../contexts/CartContext';
+import { useLanguage } from '../contexts/LanguageContext';
 
 export default function MenuDetails() {
     const { id } = useParams();
     const navigate = useNavigate();
     const { addToCart } = useCart();
-
     const [item, setItem] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -17,7 +17,9 @@ export default function MenuDetails() {
     const [selectedAddon, setSelectedAddon] = useState([]);
     const [selectedFlavor, setSelectedFlavor] = useState(null);
     const [specialRequest, setSpecialRequest] = useState('');
+    const { language } = useLanguage();
 
+    if (item) console.log(item);
 
     useEffect(() => {
         setLoading(true);
@@ -99,13 +101,14 @@ export default function MenuDetails() {
                     {/* Details */}
                     <div className="col-lg-7 mb-4">
                         <div className=" p-2 h-100 rounded">
-                            <h3>{item.eng_name}</h3>
+                            <h3>{language === "eng" ? item.eng_name : item.mm_name}</h3>
+
                             <h3 className="text-danger mb-3">
                                 {item.price} THB
                             </h3>
 
                             {/* <p>{item.eng_description}</p> */}
-                            <p className="text-muted">{item.eng_description}</p>
+                            <p className="text-muted">{language === 'eng' ? item.eng_description : item.mm_description}</p>
 
                             {/* protein */}
                             {proteinModifier && proteinModifier.length > 0 && (
@@ -123,7 +126,7 @@ export default function MenuDetails() {
                                                 onChange={() => setSelectedProtein(option)}
                                             />
                                             <label className="form-check-label" htmlFor={`protein-${index}`}>
-                                                {option.eng_name} (+{option.price} THB)
+                                                {language === "eng" ? option.eng_name : option.mm_name} (+{option.price} THB)
                                             </label>
                                         </div>
                                     ))}
@@ -152,7 +155,7 @@ export default function MenuDetails() {
                                                 }}
                                             />
                                             <label className="form-check-label" htmlFor={`addon-${index}`}>
-                                                {option.eng_name} (+{option.price} THB)
+                                                {language === "eng" ? option.eng_name : option.mm_name} (+{option.price} THB)
                                             </label>
                                         </div>
                                     ))}
@@ -174,7 +177,8 @@ export default function MenuDetails() {
                                                 onChange={() => setSelectedFlavor(option)}
                                             />
                                             <label className="form-check-label" htmlFor={`flavor-${index}`}>
-                                                {option.eng_name} {option.price ? `(+${option.price} THB)` : ''}
+                                                {/* {option.eng_name} {option.price ? `(+${option.price} THB)` : ''} */}
+                                                {language === "eng" ? option.eng_name : option.mm_name} (+{option.price} THB)
                                             </label>
                                         </div>
                                     ))}
@@ -184,7 +188,7 @@ export default function MenuDetails() {
                             {/* Special Request */}
 
                            <div className='mb-3'>
-                                <textarea onChange={(e) => setSpecialRequest(e.target.value)} name="specialRequest" rows={5} id="" className='form-control' placeholder='Do you have any request?'></textarea>
+                                <textarea onChange={(e) => setSpecialRequest(e.target.value)} maxLength={200} name="specialRequest" rows={5} id="" className='form-control' placeholder='Do you have any request?'></textarea>
                            </div>
                            
                             {/* Quantity */}
