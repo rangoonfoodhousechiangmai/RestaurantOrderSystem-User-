@@ -4,13 +4,15 @@ import { STORAGE_URL } from '../services/config';
 import { useCart } from '../contexts/CartContext';
 import { api } from '../services/api';
 import SpinnerOverlay from '../components/SpinnerOverlay';
+import { useLanguage } from '../contexts/LanguageContext';
 
 export default function CartPage() {
   const { cart, updateQuantity, removeFromCart, clearCart, totalItems, totalPrice } = useCart();
   const [showModal, setShowModal] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const tableSessionToken = localStorage.getItem('tableSessionToken');
-  const [orderType, setOrderType] = useState(null);
+  // const [orderType, setOrderType] = useState(null);
+  const { language } = useLanguage();
 
   const prepareOrderPayload = (cartItems, tableToken, orderType) => {
     return {
@@ -104,19 +106,19 @@ export default function CartPage() {
                     />
                   </div>
                   <div className="col-md-4 col-6">
-                    <h5 className="card-title">{item.eng_name}</h5>
+                    <h5 className="card-title">{language === 'eng' ? item.eng_name : item.mm_name}</h5>
                     {/* protein */}
                     {item.selectedProtein && (
-                      <p className="card-text text-muted">Protein: {item.selectedProtein.eng_name}</p>
+                      <p className="card-text text-muted">Protein: {language === 'eng' ? item.selectedProtein.eng_name : item.selectedProtein.mm_name}</p>
                     )}
                     {/* addon */}
                     {item.selectedAddon && item.selectedAddon.length > 0 && (
-                      <p className="card-text text-muted">Add-ons: {item.selectedAddon.map(a => a.eng_name).join(', ')}</p>
+                      <p className="card-text text-muted">Add-ons: {item.selectedAddon.map(a => language === 'eng' ? a.eng_name : a.mm_name).join(', ')}</p>
                     )}
 
                     {/* flavor */}
                     {item.selectedFlavor && (
-                      <p className="card-text text-muted">Flavor: {item.selectedFlavor.eng_name}</p>
+                      <p className="card-text text-muted">Flavor: {language === 'eng' ? item.selectedFlavor.eng_name : item.selectedFlavor.mm_name}</p>
                     )}
 
 
@@ -170,7 +172,7 @@ export default function CartPage() {
                 <span className="text-danger">{totalPrice.toFixed(2)} THB</span>
               </div>
               <hr />
-              <button className="btn btn-danger w-100 mb-2" onClick={() => setShowModal(true)}>
+              <button className="btn btn-warning w-100 mb-2" onClick={() => setShowModal(true)}>
                 Proceed to Checkout
               </button>
               <button className="btn btn-outline-secondary w-100 mb-2" onClick={clearCart}>

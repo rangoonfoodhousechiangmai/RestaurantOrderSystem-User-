@@ -19,8 +19,6 @@ export default function MenuDetails() {
     const [specialRequest, setSpecialRequest] = useState('');
     const { language } = useLanguage();
 
-    if (item) console.log(item);
-
     useEffect(() => {
         setLoading(true);
         api.get(`/menus/${id}`)
@@ -87,7 +85,7 @@ export default function MenuDetails() {
             <div className="container-fluid pb-5">
                 <div className="row px-xl-5">
                     <div onClick={() => navigate(-1)} style={{ cursor: 'pointer' }}>
-                        <i class="fa-solid fa-arrow-left fs-1"></i>
+                        <i className="fa-solid fa-arrow-left fs-1"></i>
                     </div>
                     {/* Image */}
                     <div className="col-lg-5 mb-4">

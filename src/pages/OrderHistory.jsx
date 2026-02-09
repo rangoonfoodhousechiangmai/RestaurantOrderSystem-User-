@@ -136,7 +136,7 @@ export default function OrderHistory() {
             ) : (
                 <div className='text-center'>
                     <h2>No Order History</h2>
-                    <Link to="/" className="btn btn-danger">
+                    <Link to="/" className="btn btn-dark">
                         Go Back to Home
                     </Link>
                 </div>

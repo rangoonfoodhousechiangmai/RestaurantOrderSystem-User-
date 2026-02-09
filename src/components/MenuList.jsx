@@ -11,6 +11,7 @@ export default function MenuList({ selectedCategory }) {
     const { language } = useLanguage();
 
     useEffect(() => {
+        // setLoading(true);
         api.get('/menus')
             .then(data => setMenuItems(data))
             .catch(err => setError(err.message))
@@ -61,20 +62,6 @@ export default function MenuList({ selectedCategory }) {
                     </div>
                 ))}
             </div>
-
-            {/* Cart Summary */}
-            {/* {cart.length > 0 && (
-                <div className="mt-4">
-                    <h4>Cart ({cart.length})</h4>
-                    <ul className="list-group">
-                        {cart.map((item, index) => (
-                            <li key={index} className="list-group-item d-flex justify-content-between">
-                                {item.eng_name} <span>{item.price} Ks</span>
-                            </li>
-                        ))}
-                    </ul>
-                </div>
-            )} */}
         </div>
     )
 }
