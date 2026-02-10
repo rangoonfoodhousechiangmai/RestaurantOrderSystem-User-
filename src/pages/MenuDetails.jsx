@@ -3,12 +3,12 @@ import { useParams, Link, useNavigate } from 'react-router-dom';
 import { STORAGE_URL } from '../services/config';
 import { api } from '../services/api';
 import { useCart } from '../contexts/CartContext';
+import { useLanguage } from '../contexts/LanguageContext';
 
 export default function MenuDetails() {
     const { id } = useParams();
     const navigate = useNavigate();
     const { addToCart } = useCart();
-
     const [item, setItem] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -17,7 +17,7 @@ export default function MenuDetails() {
     const [selectedAddon, setSelectedAddon] = useState([]);
     const [selectedFlavor, setSelectedFlavor] = useState(null);
     const [specialRequest, setSpecialRequest] = useState('');
-
+    const { language } = useLanguage();
 
     useEffect(() => {
         setLoading(true);
@@ -84,6 +84,9 @@ export default function MenuDetails() {
             {/* ===== Menu Detail Start ===== */}
             <div className="container-fluid pb-5">
                 <div className="row px-xl-5">
+                    <div onClick={() => navigate(-1)} style={{ cursor: 'pointer' }}>
+                        <i className="fa-solid fa-arrow-left fs-1"></i>
+                    </div>
                     {/* Image */}
                     <div className="col-lg-5 mb-4">
                         <img
@@ -96,13 +99,14 @@ export default function MenuDetails() {
                     {/* Details */}
                     <div className="col-lg-7 mb-4">
                         <div className=" p-2 h-100 rounded">
-                            <h3>{item.eng_name}</h3>
+                            <h3>{language === "eng" ? item.eng_name : item.mm_name}</h3>
+
                             <h3 className="text-danger mb-3">
                                 {item.price} THB
                             </h3>
 
                             {/* <p>{item.eng_description}</p> */}
-                            <p className="text-muted">{item.eng_description}</p>
+                            <p className="text-muted">{language === 'eng' ? item.eng_description : item.mm_description}</p>
 
                             {/* protein */}
                             {proteinModifier && proteinModifier.length > 0 && (
@@ -120,7 +124,7 @@ export default function MenuDetails() {
                                                 onChange={() => setSelectedProtein(option)}
                                             />
                                             <label className="form-check-label" htmlFor={`protein-${index}`}>
-                                                {option.eng_name} (+{option.price} THB)
+                                                {language === "eng" ? option.eng_name : option.mm_name} (+{option.price} THB)
                                             </label>
                                         </div>
                                     ))}
@@ -149,7 +153,7 @@ export default function MenuDetails() {
                                                 }}
                                             />
                                             <label className="form-check-label" htmlFor={`addon-${index}`}>
-                                                {option.eng_name} (+{option.price} THB)
+                                                {language === "eng" ? option.eng_name : option.mm_name} (+{option.price} THB)
                                             </label>
                                         </div>
                                     ))}
@@ -171,7 +175,8 @@ export default function MenuDetails() {
                                                 onChange={() => setSelectedFlavor(option)}
                                             />
                                             <label className="form-check-label" htmlFor={`flavor-${index}`}>
-                                                {option.eng_name} {option.price ? `(+${option.price} THB)` : ''}
+                                                {/* {option.eng_name} {option.price ? `(+${option.price} THB)` : ''} */}
+                                                {language === "eng" ? option.eng_name : option.mm_name} (+{option.price} THB)
                                             </label>
                                         </div>
                                     ))}
@@ -181,7 +186,7 @@ export default function MenuDetails() {
                             {/* Special Request */}
 
                            <div className='mb-3'>
-                                <textarea onChange={(e) => setSpecialRequest(e.target.value)} name="specialRequest" rows={5} id="" className='form-control' placeholder='Do you have any request?'></textarea>
+                                <textarea onChange={(e) => setSpecialRequest(e.target.value)} maxLength={200} name="specialRequest" rows={5} id="" className='form-control' placeholder='Do you have any request?'></textarea>
                            </div>
                            
                             {/* Quantity */}
@@ -190,10 +195,10 @@ export default function MenuDetails() {
                                 {/* Quantity Group */}
                                 <div className="input-group w-100 w-sm-auto" style={{ maxWidth: '130px' }}>
                                     <button
-                                        className="btn btn-danger"
+                                        className="btn btn-dark"
                                         onClick={decreaseQty}
                                     >
-                                        <i className="fa fa-minus"></i>
+                                        <i className="fa fa-minus text-yellow"></i>
                                     </button>
 
                                     <input
@@ -204,20 +209,20 @@ export default function MenuDetails() {
                                     />
 
                                     <button
-                                        className="btn btn-danger"
+                                        className="btn btn-dark"
                                         onClick={increaseQty}
                                     >
-                                        <i className="fa fa-plus"></i>
+                                        <i className="fa fa-plus text-yellow"></i>
                                     </button>
                                 </div>
 
                                 {/* Add to Cart Button */}
                                 <button
-                                    className="btn btn-danger px-4"
+                                    className="btn btn-dark px-4"
                                     onClick={handleAddToCart}
                                 >
-                                    <i className="fa fa-shopping-cart me-2"></i>
-                                    <span className="d-none d-sm-inline">
+                                    <i className="fa fa-shopping-cart me-2 text-yellow"></i>
+                                    <span className="d-none d-sm-inline text-yellow">
                                         Add To Cart
                                     </span>
                                 </button>
@@ -225,11 +230,11 @@ export default function MenuDetails() {
 
 
                             {/* Back */}
-                            <button className="btn btn-outline-danger" onClick={() => {
+                            {/* <button className="btn btn-outline-danger" onClick={() => {
                                 navigate('/');
                             }}>
                                 Back
-                            </button>
+                            </button> */}
                         </div>
                     </div>
                 </div>

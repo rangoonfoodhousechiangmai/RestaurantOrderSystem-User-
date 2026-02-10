@@ -3,12 +3,16 @@ import { Link } from 'react-router-dom';
 import { STORAGE_URL } from '../services/config';
 import { useCart } from '../contexts/CartContext';
 import { api } from '../services/api';
+import SpinnerOverlay from '../components/SpinnerOverlay';
+import { useLanguage } from '../contexts/LanguageContext';
 
 export default function CartPage() {
   const { cart, updateQuantity, removeFromCart, clearCart, totalItems, totalPrice } = useCart();
   const [showModal, setShowModal] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const tableSessionToken = localStorage.getItem('tableSessionToken');
-  const [orderType, setOrderType] = useState(null);
+  // const [orderType, setOrderType] = useState(null);
+  const { language } = useLanguage();
 
   const prepareOrderPayload = (cartItems, tableToken, orderType) => {
     return {
@@ -31,17 +35,20 @@ export default function CartPage() {
         return;
       }
 
-  try {
-      const payload = prepareOrderPayload(cart, tableSessionToken, selectedOrderType);
-      const response = await api.post('/orders', payload);
+      setIsSubmitting(true);
+      try {
+        const payload = prepareOrderPayload(cart, tableSessionToken, selectedOrderType);
+        const response = await api.post('/orders', payload);
         alert('Order submitted successfully');
         clearCart();
-
-      // Optionally redirect to order status page or home
-    } catch (error) {
-      // console.error(error);
-      alert(error.message || 'Failed to submit order. Please try again.');
-    }
+        setShowModal(false);
+        // Optionally redirect to order status page or home
+      } catch (error) {
+        // console.error(error);
+        alert(error.message || 'Failed to submit order. Please try again.');
+      } finally {
+        setIsSubmitting(false);
+      }
   };
 
 
@@ -73,7 +80,7 @@ export default function CartPage() {
         <div className="text-center">
           <h2>Your Cart is Empty</h2>
           <p className="text-muted">Add some delicious items to your cart!</p>
-          <Link to="/" className="btn btn-danger">Continue Shopping</Link>
+          <Link to="/" className="btn btn-dark">Continue Ordering</Link>
         </div>
 
 
@@ -99,19 +106,19 @@ export default function CartPage() {
                     />
                   </div>
                   <div className="col-md-4 col-6">
-                    <h5 className="card-title">{item.eng_name}</h5>
+                    <h5 className="card-title">{language === 'eng' ? item.eng_name : item.mm_name}</h5>
                     {/* protein */}
                     {item.selectedProtein && (
-                      <p className="card-text text-muted">Protein: {item.selectedProtein.eng_name}</p>
+                      <p className="card-text text-muted">Protein: {language === 'eng' ? item.selectedProtein.eng_name : item.selectedProtein.mm_name}</p>
                     )}
                     {/* addon */}
                     {item.selectedAddon && item.selectedAddon.length > 0 && (
-                      <p className="card-text text-muted">Add-ons: {item.selectedAddon.map(a => a.eng_name).join(', ')}</p>
+                      <p className="card-text text-muted">Add-ons: {item.selectedAddon.map(a => language === 'eng' ? a.eng_name : a.mm_name).join(', ')}</p>
                     )}
 
                     {/* flavor */}
                     {item.selectedFlavor && (
-                      <p className="card-text text-muted">Flavor: {item.selectedFlavor.eng_name}</p>
+                      <p className="card-text text-muted">Flavor: {language === 'eng' ? item.selectedFlavor.eng_name : item.selectedFlavor.mm_name}</p>
                     )}
 
 
@@ -165,7 +172,7 @@ export default function CartPage() {
                 <span className="text-danger">{totalPrice.toFixed(2)} THB</span>
               </div>
               <hr />
-              <button className="btn btn-danger w-100 mb-2" onClick={() => setShowModal(true)}>
+              <button className="btn btn-warning w-100 mb-2" onClick={() => setShowModal(true)}>
                 Proceed to Checkout
               </button>
               <button className="btn btn-outline-secondary w-100 mb-2" onClick={clearCart}>
@@ -209,10 +216,8 @@ export default function CartPage() {
                   <div className="col-6">
                     <button
                       className="btn w-100 border rounded-4 py-4 d-flex flex-column align-items-center gap-2 order-type-btn"
-                      onClick={() => {
-                        submitOrder('dine_in');
-                        setShowModal(false);
-                      }}
+                      onClick={() => submitOrder('dine_in')}
+                      disabled={isSubmitting}
                     >
                       <i className="fas fa-utensils fs-2 text-primary"></i>
                       <span className="fw-semibold">Dine In</span>
@@ -224,10 +229,8 @@ export default function CartPage() {
                   <div className="col-6">
                     <button
                       className="btn w-100 border rounded-4 py-4 d-flex flex-column align-items-center gap-2 order-type-btn"
-                      onClick={() => {
-                        submitOrder('take_away');
-                        setShowModal(false);
-                      }}
+                      onClick={() => submitOrder('take_away')}
+                      disabled={isSubmitting}
                     >
                       <i className="fas fa-shopping-bag fs-2 text-success"></i>
                       <span className="fw-semibold">Take Away</span>
@@ -241,6 +244,8 @@ export default function CartPage() {
           </div>
         </div>
       )}
+
+      <SpinnerOverlay isVisible={isSubmitting} />
 
     </div>
   );
