@@ -6,9 +6,8 @@ export default function OrderHistory() {
     let [loading, setLoading] = useState(false);
     let [error, setError] = useState(null);
     let [orders, setOrders] = useState(null);
-    // console.log(orderToken);
+
     let tableSessionToken = localStorage.getItem('tableSessionToken');
-    // console.log(tableSessionToken);
 
     useEffect(() => {
         const getHistory = async () => {
@@ -18,7 +17,6 @@ export default function OrderHistory() {
                 const response = await api.post('/orders/history', {
                     tableSessionToken
                 });
-                console.log(response);
                 if (response?.orders) {
                     setOrders(response.orders);
                 }
@@ -121,10 +119,19 @@ export default function OrderHistory() {
                                                 </tbody>
                                             </table>
                                             <div className='text-end'>
-                                                <Link to="/payment" state={{ totalPrice: order.total_price, orderCode: order.order_code }} className='btn btn-dark'>
+                                                {order.status === 'completed' && order.payment_verified_at !== null ? (
+
+                                                    <span className="badge bg-success">
+                                                        <i className="bi bi-check-circle me-1"></i>Paid
+                                                    </span>
+                                                ) : <Link to="/payment" state={{ totalPrice: order.total_price, orderCode: order.order_code }} className='btn btn-dark'>
                                                     Payment
                                                 </Link>
-                                                {/* <button >Payment</button> */}
+
+                                                }
+
+
+
                                             </div>
                                         </div>
                                     )}
