@@ -172,7 +172,7 @@ export default function CartPage() {
                 <span className="text-danger">{totalPrice.toFixed(2)} THB</span>
               </div>
               <hr />
-              <button className="btn btn-warning w-100 mb-2" onClick={() => setShowModal(true)}>
+              <button disabled={!tableSessionToken}  className="btn btn-warning w-100 mb-2" onClick={() => setShowModal(true)}>
                 Proceed to Checkout
               </button>
               <button className="btn btn-outline-secondary w-100 mb-2" onClick={clearCart}>
