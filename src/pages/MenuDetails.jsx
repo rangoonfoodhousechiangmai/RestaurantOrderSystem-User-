@@ -16,6 +16,7 @@ export default function MenuDetails() {
     const [selectedProtein, setSelectedProtein] = useState(null);
     const [selectedAddon, setSelectedAddon] = useState([]);
     const [selectedFlavor, setSelectedFlavor] = useState(null);
+    const [selectedPortion, setSelectedPortion] = useState(null);
     const [specialRequest, setSpecialRequest] = useState('');
     const { language } = useLanguage();
 
@@ -36,9 +37,8 @@ export default function MenuDetails() {
     const proteinModifier = item && item.modifiers && item.modifiers.filter(mod => mod.type === 'protein' && mod.selection_type === 'single');
     const addOnModifier = item && item.modifiers && item.modifiers.filter(mod => mod.type === 'addon' && mod.selection_type === 'multiple');
     const flavorModifier = item && item.modifiers && item.modifiers.filter(mod => mod.type === 'flavor' && mod.selection_type === 'single');
+    const portionModifier = item && item.modifiers && item.modifiers.filter(mod => mod.type === 'portion' && mod.selection_type === 'single');
     
-
-
     const increaseQty = () => {
         setQuantity(quantity + 1);
     };
@@ -58,6 +58,11 @@ export default function MenuDetails() {
             return;
         }
 
+        if (portionModifier.length !== 0 && selectedPortion === null) {
+            alert('Please select a portion.');
+            return;
+        }
+
         // const selectedModifierIds = [
         //     ...(selectedProtein ? [selectedProtein.id] : []),
         //     ...(selectedFlavor ? [selectedFlavor.id] : []),
@@ -65,10 +70,11 @@ export default function MenuDetails() {
         // ];
         const itemToAdd = {
             ...item,
-            price: item.price + (selectedProtein ? selectedProtein.price : 0) + selectedAddon.reduce((sum, a) => sum + a.price, 0) + (selectedFlavor ? selectedFlavor.price : 0),
+            price: item.price + (selectedProtein ? selectedProtein.price : 0) + selectedAddon.reduce((sum, a) => sum + a.price, 0) + (selectedFlavor ? selectedFlavor.price : 0) + (selectedPortion ? selectedPortion.price : 0),
             selectedProtein,
             selectedAddon,
             selectedFlavor,
+            selectedPortion,
             specialRequest,
         };
         addToCart(itemToAdd, quantity);
@@ -124,6 +130,29 @@ export default function MenuDetails() {
                                                 onChange={() => setSelectedProtein(option)}
                                             />
                                             <label className="form-check-label" htmlFor={`protein-${index}`}>
+                                                {language === "eng" ? option.eng_name : option.mm_name} (+{option.price} THB)
+                                            </label>
+                                        </div>
+                                    ))}
+                                </div>
+                            )}
+
+                            {/* portion */}
+                            {portionModifier && portionModifier.length > 0 && (
+                                <div className="mb-3">
+                                    <h5>Choose Portion:</h5>
+                                    {portionModifier.map((option, index) => (
+                                        <div key={index} className="form-check">
+                                            <input required
+                                                className="form-check-input"
+                                                type="radio"
+                                                name="portion"
+                                                id={`portion-${index}`}
+                                                value={option.eng_name}
+                                                // checked={selectedProtein && selectedProtein.name === option.name}
+                                                onChange={() => setSelectedPortion(option)}
+                                            />
+                                            <label className="form-check-label" htmlFor={`portion-${index}`}>
                                                 {language === "eng" ? option.eng_name : option.mm_name} (+{option.price} THB)
                                             </label>
                                         </div>

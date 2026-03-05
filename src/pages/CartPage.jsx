@@ -121,6 +121,11 @@ export default function CartPage() {
                       <p className="card-text text-muted">Flavor: {language === 'eng' ? item.selectedFlavor.eng_name : item.selectedFlavor.mm_name}</p>
                     )}
 
+                    {/* portion */}
+                    {item.selectedPortion && (
+                      <p className="card-text text-muted">Portion: {language === 'eng' ? item.selectedPortion.eng_name : item.selectedPortion.mm_name}</p>
+                    )}
+
 
                     <p className="card-text text-muted">{item.price} THB each</p>
                   </div>
