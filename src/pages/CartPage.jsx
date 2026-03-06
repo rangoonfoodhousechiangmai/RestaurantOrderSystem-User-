@@ -142,7 +142,7 @@ export default function CartPage() {
                     </div>
                   </div>
                   <div className="col-md-2 col-4 mt-3 mt-md-0">
-                    <h6 className="text-danger">{(item.price * item.quantity).toFixed(2)} THB</h6>
+                    <h6 className="">{(item.price * item.quantity).toFixed(2)} THB</h6>
                   </div>
                   <div className="col-md-1 col-4 mt-3 mt-md-0 text-end">
                     <button

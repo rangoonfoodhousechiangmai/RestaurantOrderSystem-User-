@@ -101,7 +101,7 @@ export default function MenuDetails() {
                         <div className=" p-2 h-100 rounded">
                             <h3>{language === "eng" ? item.eng_name : item.mm_name}</h3>
 
-                            <h3 className="text-danger mb-3">
+                            <h3 className="mb-3">
                                 {item.price} THB
                             </h3>
 

@@ -47,7 +47,7 @@ export default function MenuList({ selectedCategory }) {
                                 />
                                 <div className="card-body d-flex flex-column" >
                                     <h5 className="card-title text-center">{language === "eng" ? item.eng_name : item.mm_name}</h5>
-                                    <p className="card-text text-center" style={{ color: '#E94B4B' }}>{item.price} THB</p>
+                                    <p className="card-text text-center" style={{ color: '#000000' }}>{item.price} THB</p>
                                     {/* <p>{item.eng_description}</p> */}
                                     {/* <button
                                     className="btn btn-danger mt-auto"
