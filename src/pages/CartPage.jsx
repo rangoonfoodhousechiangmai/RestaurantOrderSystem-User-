@@ -30,25 +30,25 @@ export default function CartPage() {
   };
 
   const submitOrder = async (selectedOrderType) => {
-      if (!tableSessionToken) {
-        alert('Please scan the QR code');
-        return;
-      }
+    if (!tableSessionToken) {
+      alert('Please scan the QR code');
+      return;
+    }
 
-      setIsSubmitting(true);
-      try {
-        const payload = prepareOrderPayload(cart, tableSessionToken, selectedOrderType);
-        const response = await api.post('/orders', payload);
-        alert('Order submitted successfully');
-        clearCart();
-        setShowModal(false);
-        // Optionally redirect to order status page or home
-      } catch (error) {
-        // console.error(error);
-        alert(error.message || 'Failed to submit order. Please try again.');
-      } finally {
-        setIsSubmitting(false);
-      }
+    setIsSubmitting(true);
+    try {
+      const payload = prepareOrderPayload(cart, tableSessionToken, selectedOrderType);
+      const response = await api.post('/orders', payload);
+      alert('Order submitted successfully');
+      clearCart();
+      setShowModal(false);
+      // Optionally redirect to order status page or home
+    } catch (error) {
+      // console.error(error);
+      alert(error.message || 'Failed to submit order. Please try again.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
 
@@ -177,14 +177,14 @@ export default function CartPage() {
                 <span className="text-danger">{totalPrice.toFixed(2)} THB</span>
               </div>
               <hr />
-              <button disabled={!tableSessionToken}  className="btn btn-warning w-100 mb-2" onClick={() => setShowModal(true)}>
+              <button disabled={!tableSessionToken} className="btn btn-warning w-100 mb-2" onClick={() => setShowModal(true)}>
                 Proceed to Checkout
               </button>
               <button className="btn btn-outline-secondary w-100 mb-2" onClick={clearCart}>
                 Clear Cart
               </button>
-              <Link to="/" className="btn btn-outline-primary w-100">
-                Continue Shopping
+              <Link to="/" className="btn btn-outline-dark w-100">
+                Continue Ordering
               </Link>
             </div>
           </div>
