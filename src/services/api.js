@@ -39,6 +39,10 @@ async function apiRequest(endpoint, options = {}) {
       throw new Error("404");
     }
 
+    if (response.status === 429) {
+      throw new Error("429 Too Many Requests");
+    }
+
     const error = await response.json().catch(() => ({}));
     throw new Error(error.error || `Request failed: ${response.message}`);
   }

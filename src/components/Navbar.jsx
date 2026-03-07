@@ -1,12 +1,40 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { useCart } from "../contexts/CartContext";
 import { useLanguage } from "../contexts/LanguageContext";
+import { api } from "../services/api";
 import Brand from '../assets/brand.jpg';
+
 
 export default function Navbar() {
   const { totalItems } = useCart();
+  const tableSessionToken = localStorage.getItem('tableSessionToken');
   const { language, toggleLanguage } = useLanguage();
+  const [callWaiterLoading, setCallWaiterLoading] = useState(false);
+  const [callWaiterSuccess, setCallWaiterSuccess] = useState(false);
+  const [callWaiterError, setCallWaiterError] = useState('');
+
+  const handleCallWaiter = async () => {
+    if (callWaiterLoading || callWaiterSuccess) return;
+    
+    setCallWaiterLoading(true);
+    setCallWaiterError('');
+    try {
+      let response = await api.post('/tables/call-waiter');
+      setCallWaiterSuccess(true);
+      setTimeout(() => setCallWaiterSuccess(false), 3000);
+    } catch (error) {
+      // Check for 429 Too Many Requests (throttle)
+      if (error.message && error.message.includes('429')) {
+        setCallWaiterError('Wait before the next call');
+        setTimeout(() => setCallWaiterError(''), 3000);
+      } else {
+        console.error('Failed to call waiter:', error);
+      }
+    } finally {
+      setCallWaiterLoading(false);
+    }
+  };
 
   return (
     <nav className="navbar navbar-expand-lg shadow-sm mb-4 p-0" style={{ backgroundColor: '#000' }}>
@@ -19,6 +47,7 @@ export default function Navbar() {
         {/* Right side */}
         <div className="ms-auto d-md-flex mt-3 mt-md-0">
           <div>
+            
             <Link
               to="/carts"
               className="btn btn-outline-light position-relative"
@@ -39,6 +68,15 @@ export default function Navbar() {
             >
               📜 History
             </Link>
+
+            {tableSessionToken && (<button
+              onClick={handleCallWaiter}
+              className={`btn ms-2 ${callWaiterSuccess ? 'btn-success' : callWaiterError ? 'btn-danger' : 'btn-outline-light'}`}
+              disabled={callWaiterLoading}
+            >
+              {callWaiterLoading ? '⏳' : callWaiterSuccess ? '✓' : callWaiterError ? '⚠️' : '🛎️'} 
+              {callWaiterLoading ? ' Calling...' : callWaiterSuccess ? ' Called!' : callWaiterError ? callWaiterError : ' Call Waiter'}
+            </button>)}
           </div>
 
           <div
