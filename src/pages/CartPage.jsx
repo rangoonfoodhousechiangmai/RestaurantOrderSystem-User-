@@ -8,10 +8,9 @@ import { useLanguage } from '../contexts/LanguageContext';
 
 export default function CartPage() {
   const { cart, updateQuantity, removeFromCart, clearCart, totalItems, totalPrice } = useCart();
-  const [showModal, setShowModal] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const tableSessionToken = localStorage.getItem('tableSessionToken');
-  // const [orderType, setOrderType] = useState(null);
+  const storedOrderType = localStorage.getItem('orderType');
   const { language } = useLanguage();
 
   const prepareOrderPayload = (cartItems, tableToken, orderType) => {
@@ -29,19 +28,27 @@ export default function CartPage() {
     };
   };
 
-  const submitOrder = async (selectedOrderType) => {
+  const handleProceedToCheckout = () => {
     if (!tableSessionToken) {
       alert('Please scan the QR code');
       return;
     }
 
+    if (!storedOrderType) {
+      alert('Please scan the QR code again to select order type');
+      return;
+    }
+
+    submitOrder(storedOrderType);
+  };
+
+  const submitOrder = async (selectedOrderType) => {
     setIsSubmitting(true);
     try {
       const payload = prepareOrderPayload(cart, tableSessionToken, selectedOrderType);
       const response = await api.post('/orders', payload);
       alert('Order submitted successfully');
       clearCart();
-      setShowModal(false);
       // Optionally redirect to order status page or home
     } catch (error) {
       // console.error(error);
@@ -168,6 +175,14 @@ export default function CartPage() {
             <div className="card-body">
               <h5 className="card-title">Order Summary</h5>
               <hr />
+              {storedOrderType && (
+                <div className="mb-3">
+                  <span className="badge bg-info fs-6">
+                    <i className={storedOrderType === 'dine_in' ? 'fas fa-utensils me-1' : 'fas fa-shopping-bag me-1'}></i>
+                    {storedOrderType === 'dine_in' ? 'Dine In' : 'Take Away'}
+                  </span>
+                </div>
+              )}
               <div className="d-flex justify-content-between">
                 <span>Total Items:</span>
                 <span>{totalItems}</span>
@@ -177,7 +192,7 @@ export default function CartPage() {
                 <span className="text-danger">{totalPrice.toFixed(2)} THB</span>
               </div>
               <hr />
-              <button disabled={!tableSessionToken} className="btn btn-warning w-100 mb-2" onClick={() => setShowModal(true)}>
+              <button disabled={!tableSessionToken || !storedOrderType} className="btn btn-warning w-100 mb-2" onClick={handleProceedToCheckout}>
                 Proceed to Checkout
               </button>
               <button className="btn btn-outline-secondary w-100 mb-2" onClick={clearCart}>
@@ -190,65 +205,6 @@ export default function CartPage() {
           </div>
         </div>
       </div>
-
-      {/* Modal */}
-      {showModal && (
-        <div
-          className="modal fade show d-block"
-          tabIndex="-1"
-          role="dialog"
-          style={{ backgroundColor: 'rgba(0,0,0,0.6)' }}
-        >
-          <div className="modal-dialog modal-dialog-centered" role="document">
-            <div className="modal-content rounded-4 shadow">
-
-              <div className="modal-header border-0 text-center">
-                <h5 className="modal-title w-100 fw-bold">Choose Order Type</h5>
-                <button
-                  type="button"
-                  className="btn-close position-absolute end-0 me-3"
-                  onClick={() => setShowModal(false)}
-                />
-              </div>
-
-              <div className="modal-body px-4 pb-4">
-                <p className="text-center text-muted mb-4">
-                  How would you like to enjoy your food?
-                </p>
-
-                <div className="row g-3">
-                  {/* Dine In */}
-                  <div className="col-6">
-                    <button
-                      className="btn w-100 border rounded-4 py-4 d-flex flex-column align-items-center gap-2 order-type-btn"
-                      onClick={() => submitOrder('dine_in')}
-                      disabled={isSubmitting}
-                    >
-                      <i className="fas fa-utensils fs-2 text-primary"></i>
-                      <span className="fw-semibold">Dine In</span>
-                      <small className="text-muted">Eat at table</small>
-                    </button>
-                  </div>
-
-                  {/* Take Away */}
-                  <div className="col-6">
-                    <button
-                      className="btn w-100 border rounded-4 py-4 d-flex flex-column align-items-center gap-2 order-type-btn"
-                      onClick={() => submitOrder('take_away')}
-                      disabled={isSubmitting}
-                    >
-                      <i className="fas fa-shopping-bag fs-2 text-success"></i>
-                      <span className="fw-semibold">Take Away</span>
-                      <small className="text-muted">Pack & go</small>
-                    </button>
-                  </div>
-                </div>
-              </div>
-
-            </div>
-          </div>
-        </div>
-      )}
 
       <SpinnerOverlay isVisible={isSubmitting} />
 
