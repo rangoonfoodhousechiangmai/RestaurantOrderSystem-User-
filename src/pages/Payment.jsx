@@ -72,6 +72,7 @@ export default function Payment() {
         try {
             await uploadPaymentProof();
             navigate('/history');
+            alert('Payment has been sent.');
         } catch (err) {
             setError(err.message || 'Payment failed. Please try again.');
             console.error('Payment error:', err);
