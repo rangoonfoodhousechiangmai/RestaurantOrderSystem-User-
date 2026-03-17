@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { api } from '../services/api';
-import Qr from '../assets/table-1-OZ7MGIsrzbfDM85.svg';
+import Qr from '../assets/promptpay.jpg';
 import { BACKEND_URL } from '../services/config';
 
 export default function Payment() {
