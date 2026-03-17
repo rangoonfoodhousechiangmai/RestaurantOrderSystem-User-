@@ -50,7 +50,7 @@ export default function Navbar() {
             
             <Link
               to="/carts"
-              className="btn btn-outline-light position-relative"
+              className="btn btn-outline-light position-relative p-1"
             >
               🛒 Cart
 
@@ -64,18 +64,18 @@ export default function Navbar() {
 
             <Link
               to="/history"
-              className="btn btn-outline-light ms-2"
+              className="btn btn-outline-light ms-2 p-1"
             >
               📜 History
             </Link>
 
             {tableSessionToken && (<button
               onClick={handleCallWaiter}
-              className={`btn ms-2 ${callWaiterSuccess ? 'btn-success' : callWaiterError ? 'btn-danger' : 'btn-outline-light'}`}
+              className={`btn p-1 ms-2 ${callWaiterSuccess ? 'btn-success' : callWaiterError ? 'btn-danger' : 'btn-outline-light'}`}
               disabled={callWaiterLoading}
             >
-              {callWaiterLoading ? '⏳' : callWaiterSuccess ? '✓' : callWaiterError ? '⚠️' : '🛎️'} 
-              {callWaiterLoading ? ' Calling...' : callWaiterSuccess ? ' Called!' : callWaiterError ? callWaiterError : ' Call Waiter'}
+              {callWaiterLoading ? '⏳' : callWaiterSuccess ? '✓' : callWaiterError ? '⚠️' : '👤'} 
+              {callWaiterLoading ? ' Calling...' : callWaiterSuccess ? ' Called!' : callWaiterError ? callWaiterError : ' Call Staff'}
             </button>)}
           </div>
 

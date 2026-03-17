@@ -94,22 +94,23 @@ export default function MenuDetails() {
                         <i className="fa-solid fa-arrow-left fs-1"></i>
                     </div>
                     {/* Image */}
-                    <div className="col-lg-5 mb-4">
+                    <div className="col-lg-5 mb-4 text-center">
                         <img
-                            className="w-100 rounded"
-                            src={`${STORAGE_URL}/${item.image_path}`}
-                            alt={item.eng_name}
+                        style={{ width: "60%", height: "250px" }}
+                        className="rounded"
+                        src={`${STORAGE_URL}/${item.image_path}`}
+                        alt={item.eng_name}
                         />
                     </div>
 
                     {/* Details */}
                     <div className="col-lg-7 mb-4">
                         <div className=" p-2 h-100 rounded">
-                            <h3>{language === "eng" ? item.eng_name : item.mm_name}</h3>
+                            <h5>{language === "eng" ? item.eng_name : item.mm_name}</h5>
 
-                            <h3 className="mb-3">
+                            <h5 className="mb-3">
                                 {item.price} THB
-                            </h3>
+                            </h5>
 
                             {/* <p>{item.eng_description}</p> */}
                             <p className="text-muted">{language === 'eng' ? item.eng_description : item.mm_description}</p>
@@ -117,7 +118,7 @@ export default function MenuDetails() {
                             {/* protein */}
                             {proteinModifier && proteinModifier.length > 0 && (
                                 <div className="mb-3">
-                                    <h5>Choose Protein:</h5>
+                                    <h6>Choose Protein:</h6>
                                     {proteinModifier.map((option, index) => (
                                         <div key={index} className="form-check">
                                             <input required
@@ -140,7 +141,7 @@ export default function MenuDetails() {
                             {/* portion */}
                             {portionModifier && portionModifier.length > 0 && (
                                 <div className="mb-3">
-                                    <h5>Choose Portion:</h5>
+                                    <h6>Choose Portion:</h6>
                                     {portionModifier.map((option, index) => (
                                         <div key={index} className="form-check">
                                             <input required
@@ -163,7 +164,7 @@ export default function MenuDetails() {
                             {/* Add on */}
                             {addOnModifier && addOnModifier.length > 0 && (
                                 <div className="mb-3">
-                                    <h5>Add on</h5>
+                                    <h6>Add on</h6>
                                     {addOnModifier.map((option, index) => (
                                         <div key={index} className="form-check">
                                             <input
@@ -192,7 +193,7 @@ export default function MenuDetails() {
                             {/* Flavor */}
                             {flavorModifier && flavorModifier.length > 0 && (
                                 <div className="mb-3">
-                                    <h5>Choose Flavor:</h5>
+                                    <h6>Choose Flavor:</h6>
                                     {flavorModifier.map((option, index) => (
                                         <div key={index} className="form-check">
                                             <input
@@ -215,7 +216,7 @@ export default function MenuDetails() {
                             {/* Special Request */}
 
                            <div className='mb-3'>
-                                <textarea onChange={(e) => setSpecialRequest(e.target.value)} maxLength={200} name="specialRequest" rows={5} id="" className='form-control' placeholder='Do you have any request?'></textarea>
+                                <textarea onChange={(e) => setSpecialRequest(e.target.value)} maxLength={200} name="specialRequest" rows={3} id="" className='form-control' placeholder='Do you have any request?'></textarea>
                            </div>
                            
                             {/* Quantity */}
