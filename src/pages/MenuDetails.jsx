@@ -256,6 +256,16 @@ export default function MenuDetails() {
                                         Add To Cart
                                     </span>
                                 </button>
+                                {/* <button
+                                    className="btn btn-dark px-4"
+                                    onClick={() => navigate(-1)}
+                                >
+                                        Back
+                                  
+                                </button> */}
+                                {/* <div onClick={() => navigate(-1)} style={{ cursor: 'pointer' }}>
+                                     <i className="fa-solid fa-arrow-left fs-1"></i>
+                                 </div> */}
                             </div>
 
 

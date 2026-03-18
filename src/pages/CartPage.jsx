@@ -106,7 +106,7 @@ export default function CartPage() {
               <div className="card-body">
                 <div className="row align-items-center">
                   <div className="col-md-2 col-6">
-                    <img
+                    <img style={{height:"100px"}}
                       src={`${STORAGE_URL}/${item.image_path}`}
                       alt={item.eng_name}
                       className="img-fluid rounded"
